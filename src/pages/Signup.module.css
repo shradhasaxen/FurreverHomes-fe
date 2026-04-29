@@ -1,0 +1,210 @@
+.page {
+  padding-top: 64px;
+  min-height: 100vh;
+  background-image: url('https://png.pngtree.com/background/20210716/original/pngtree-cute-cartoon-dog-wallpaper-picture-image_1348618.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 16px 48px;
+}
+
+.card {
+  background: #fff;
+  border-radius: clamp(16px, 3vw, 24px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+  width: 100%;
+  max-width: 520px;
+  overflow: hidden;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  border-bottom: 1px solid #f0edf5;
+}
+
+.tab {
+  flex: 1;
+  padding: clamp(14px, 2.5vw, 18px) 20px;
+  background: #f8f6fb;
+  border: none;
+  font-family: 'Caveat', cursive;
+  font-size: clamp(1.05rem, 2.5vw, 1.2rem);
+  font-weight: 600;
+  color: #888;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  border-bottom: 3px solid transparent;
+}
+
+.tab:first-child { border-radius: 24px 0 0 0; }
+.tab:last-child  { border-radius: 0 24px 0 0; }
+
+.tabActive {
+  background: #fff;
+  color: #3D405B;
+  border-bottom-color: #AD6A6C;
+}
+
+/* Form area */
+.formHeader {
+  text-align: center;
+  padding: clamp(20px, 4vw, 30px) clamp(20px, 5vw, 36px) 8px;
+}
+
+.pawIcon {
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.formTitle {
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(1.6rem, 4vw, 2.1rem);
+  color: #3D405B;
+  margin-bottom: 6px;
+}
+
+.formSub {
+  font-family: 'Caveat', cursive;
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  color: #999;
+}
+
+.form {
+  padding: clamp(16px, 3vw, 22px) clamp(20px, 5vw, 36px) clamp(24px, 4vw, 36px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 2vw, 14px);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(10px, 2vw, 14px);
+}
+
+/* Input field */
+.fieldWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.inputWrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1.5px solid #e8e4f0;
+  border-radius: 12px;
+  padding: 0 14px;
+  background: #faf9fc;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.inputWrap:focus-within {
+  border-color: #3D405B;
+  box-shadow: 0 0 0 3px rgba(61,64,91,0.08);
+  background: #fff;
+}
+
+.inputWrapErr { border-color: #e74c3c; }
+
+.inputIcon {
+  color: #b0a8c8;
+  font-size: clamp(0.85rem, 1.8vw, 0.95rem);
+  flex-shrink: 0;
+  width: 16px;
+  text-align: center;
+}
+
+.input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: clamp(11px, 2vw, 13px) 0;
+  font-family: 'Caveat', cursive;
+  font-size: clamp(1rem, 2.2vw, 1.12rem);
+  color: #333;
+  outline: none;
+  min-width: 0;
+}
+
+.input::placeholder {
+  color: #b0a8c8;
+  font-family: 'Caveat', cursive;
+}
+
+.err {
+  font-family: 'Caveat', cursive;
+  font-size: clamp(0.85rem, 1.8vw, 0.92rem);
+  color: #e74c3c;
+  padding-left: 4px;
+}
+
+.msg {
+  font-family: 'Caveat', cursive;
+  font-size: clamp(0.95rem, 2vw, 1.05rem);
+  text-align: center;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin: 0;
+}
+
+.success { background: #eafaf1; color: #27ae60; border: 1px solid #a9dfbf; }
+.error   { background: #fdf2f2; color: #e74c3c; border: 1px solid #f5c6cb; }
+
+.submitBtn {
+  background: linear-gradient(135deg, #AD6A6C, #c47c7e);
+  color: #fff;
+  border: none;
+  padding: clamp(12px, 2vw, 14px) 20px;
+  border-radius: 50px;
+  font-family: 'Caveat', cursive;
+  font-size: clamp(1.1rem, 2.5vw, 1.25rem);
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: box-shadow 0.2s, transform 0.15s;
+  box-shadow: 0 6px 20px rgba(173,106,108,0.35);
+}
+
+.submitBtn:hover {
+  box-shadow: 0 10px 28px rgba(173,106,108,0.48);
+  transform: translateY(-1px);
+}
+
+.submitBtn:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+
+.switchText {
+  font-family: 'Caveat', cursive;
+  font-size: clamp(0.95rem, 2vw, 1.05rem);
+  color: #888;
+  text-align: center;
+  margin: 0;
+}
+
+.switchLink {
+  background: none;
+  border: none;
+  color: #AD6A6C;
+  font-family: 'Caveat', cursive;
+  font-size: clamp(0.95rem, 2vw, 1.05rem);
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.switchLink:hover { color: #3D405B; }
+
+/* ── Responsive ── */
+@media (max-width: 540px) {
+  .form { padding: 14px 18px 26px; }
+  .formHeader { padding: 20px 18px 8px; }
+  .row { grid-template-columns: 1fr; }
+  .card { border-radius: 18px; }
+}

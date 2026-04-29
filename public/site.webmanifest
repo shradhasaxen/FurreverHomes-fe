@@ -1,0 +1,18 @@
+{
+  "name": "FurrEver Homes",
+  "short_name": "FurrEver",
+  "description": "Find your forever furry friend. Pet adoption, grooming, boarding and more.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#3D405B",
+  "theme_color": "#3D405B",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
