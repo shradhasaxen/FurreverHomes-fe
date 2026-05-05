@@ -1,6 +1,8 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
+import { orderApi } from '../api'
+import { useAuth } from '../context/AuthContext'
 import styles from './Payment.module.css'
 
 const INITIAL = {
@@ -12,7 +14,14 @@ export default function Payment() {
   const [form, setForm] = useState(INITIAL)
   const [errors, setErrors] = useState({})
   const [success, setSuccess] = useState(false)
+  const [placing, setPlacing] = useState(false)
+  const [orderNum, setOrderNum] = useState('')
   const navigate = useNavigate()
+  const location = useLocation()
+  const { user } = useAuth()
+
+  // Cart items passed via navigation state from Shopping page
+  const cartItems = location.state?.cartItems ?? []
 
   function set(field, value) {
     setForm(f => ({ ...f, [field]: value }))
@@ -32,11 +41,34 @@ export default function Payment() {
     return e
   }
 
-  function handlePay(e) {
+  async function handlePay(e) {
     e.preventDefault()
     const errs = validate()
     if (Object.keys(errs).length) { setErrors(errs); return }
-    setSuccess(true)
+    if (!user) { navigate('/login'); return }
+
+    setPlacing(true)
+    try {
+      const orderPayload = {
+        items: cartItems.map(item => ({
+          productName: item.name,
+          productCategory: item.category || 'General',
+          productImageUrl: item.img || null,
+          unitPrice: item.price,
+          quantity: item.quantity || 1,
+        })),
+        deliveryAddress: `${form.street}, ${form.city}, ${form.state} - ${form.zip}`,
+        contactPhone: user.phoneNumber || '',
+        notes: null,
+      }
+      const order = await orderApi.place(orderPayload)
+      setOrderNum(order.orderNumber)
+      setSuccess(true)
+    } catch (err) {
+      alert(err.response?.data?.message || 'Order placement failed. Please try again.')
+    } finally {
+      setPlacing(false)
+    }
   }
 
   function formatCard(val) {
@@ -103,8 +135,8 @@ export default function Payment() {
             <button type="button" className={styles.prevBtn} onClick={() => navigate('/shopping')}>
               ← Previous
             </button>
-            <motion.button type="submit" className={styles.payBtn} whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}>
-              Pay Now 🔒
+            <motion.button type="submit" className={styles.payBtn} whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} disabled={placing}>
+              {placing ? 'Placing Order...' : 'Pay Now 🔒'}
             </motion.button>
           </div>
         </form>
@@ -115,9 +147,9 @@ export default function Payment() {
           <motion.div className={styles.overlay} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <motion.div className={styles.successModal} initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.8, opacity: 0 }}>
               <div className={styles.successIcon}>🎉</div>
-              <h3>Your order is placed!</h3>
-              <p>Thank you for your payment. You can now enjoy moments with your furry friend!</p>
-              <button className={styles.okBtn} onClick={() => navigate('/shopping')}>OK</button>
+              <h3>Order Placed! 🎉</h3>
+              <p>Order #{orderNum} confirmed. You'll receive a confirmation email shortly.</p>
+              <button className={styles.okBtn} onClick={() => navigate('/dashboard/orders')}>Track My Order →</button>
             </motion.div>
           </motion.div>
         )}

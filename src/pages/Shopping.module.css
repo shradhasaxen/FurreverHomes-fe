@@ -218,6 +218,42 @@
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
+.cartItemRight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.qtyControls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f5f0eb;
+  border-radius: 8px;
+  padding: 2px 6px;
+}
+
+.qtyBtn {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #3D405B;
+  cursor: pointer;
+  padding: 0 2px;
+  line-height: 1;
+}
+
+.qtyNum {
+  font-family: 'Caveat', cursive;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #3D405B;
+  min-width: 16px;
+  text-align: center;
+}
+
 .cartItemName {
   flex: 1;
   font-family: 'Caveat', cursive;

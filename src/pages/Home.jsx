@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import Footer from '../components/Footer'
+import { useAuth } from '../context/AuthContext'
 import styles from './Home.module.css'
 
 const CAROUSEL_IMAGES = [
@@ -82,6 +83,7 @@ export default function Home() {
   const [imgIndex, setImgIndex] = useState(0)
   const [showAlert, setShowAlert] = useState(false)
   const navigate = useNavigate()
+  const { user } = useAuth()
 
   useEffect(() => {
     const id = setInterval(() => setImgIndex(i => (i + 1) % CAROUSEL_IMAGES.length), 3000)
@@ -121,14 +123,26 @@ export default function Home() {
           >
             <h1 className={styles.heroTitle}>Find Your FurrEver Friend</h1>
             <p className={styles.heroSub}>Give a loving home to a pet who needs you</p>
-            <motion.button
-              className={styles.heroBtn}
-              onClick={() => navigate('/adopt')}
-              whileHover={{ scale: 1.06 }}
-              whileTap={{ scale: 0.96 }}
-            >
-              🐾 Be My Family
-            </motion.button>
+            <div className={styles.heroBtns}>
+              <motion.button
+                className={styles.heroBtn}
+                onClick={() => navigate('/adopt')}
+                whileHover={{ scale: 1.06 }}
+                whileTap={{ scale: 0.96 }}
+              >
+                🐾 Be My Family
+              </motion.button>
+              {user && (
+                <motion.button
+                  className={styles.heroBtnSecondary}
+                  onClick={() => navigate('/dashboard')}
+                  whileHover={{ scale: 1.06 }}
+                  whileTap={{ scale: 0.96 }}
+                >
+                  👤 My Dashboard
+                </motion.button>
+              )}
+            </div>
           </motion.div>
         </div>
 

@@ -79,6 +79,33 @@
   transform: translateY(-2px);
 }
 
+.heroBtns {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.heroBtnSecondary {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  border: 2px solid rgba(255,255,255,0.6);
+  padding: clamp(12px, 2vw, 16px) clamp(28px, 5vw, 48px);
+  border-radius: 50px;
+  font-family: 'Caveat', cursive;
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition: background 0.2s, transform 0.15s;
+}
+
+.heroBtnSecondary:hover {
+  background: rgba(255,255,255,0.25);
+  transform: translateY(-2px);
+}
+
 .heroDots {
   position: absolute;
   bottom: 24px;

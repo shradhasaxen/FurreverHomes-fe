@@ -1,0 +1,89 @@
+.page { max-width: 1000px; }
+.header { margin-bottom: 28px; }
+.title { margin: 0 0 4px; font-size: 24px; font-weight: 700; color: #2d2d2d; }
+.sub { margin: 0; color: #888; font-size: 14px; }
+.loading { color: #aaa; text-align: center; padding: 40px; }
+
+.emptyState { text-align: center; padding: 60px 20px; background: #fff; border-radius: 16px; border: 1px solid #f0e8e0; }
+.emptyIcon { font-size: 48px; margin: 0 0 12px; }
+.emptyState h3 { margin: 0 0 8px; color: #2d2d2d; }
+.emptyState p { color: #888; font-size: 14px; }
+
+.layout { display: grid; grid-template-columns: 300px 1fr; gap: 20px; align-items: start; }
+
+.list { display: flex; flex-direction: column; gap: 10px; }
+
+.orderCard {
+  background: #fff; border-radius: 12px; padding: 16px;
+  border: 1.5px solid #f0e8e0; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s;
+}
+.orderCard:hover { border-color: #c97b4b; box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+.orderCardActive { border-color: #c97b4b; box-shadow: 0 4px 12px rgba(201,123,75,0.15); }
+
+.orderTop { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.orderNum { font-size: 14px; font-weight: 700; color: #2d2d2d; }
+.orderAmount { margin: 0 0 2px; font-size: 16px; font-weight: 700; color: #c97b4b; }
+.orderDate { margin: 0 0 2px; font-size: 12px; color: #aaa; }
+.orderItems { margin: 0; font-size: 12px; color: #888; }
+
+.detail { background: #fff; border-radius: 14px; padding: 24px; border: 1px solid #f0e8e0; min-height: 300px; }
+
+.selectPrompt { display: flex; align-items: center; justify-content: center; height: 200px; color: #aaa; font-size: 15px; }
+
+.detailHeader { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 24px; gap: 12px; }
+.detailTitle { margin: 0 0 4px; font-size: 20px; font-weight: 700; color: #2d2d2d; }
+.detailDate { margin: 0; font-size: 13px; color: #aaa; }
+
+.cancelBtn {
+  padding: 8px 16px; border-radius: 50px; border: 1.5px solid #e05252;
+  background: #fff5f5; color: #e05252; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap;
+}
+.cancelBtn:hover { background: #fde8e8; }
+.cancelBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* Timeline */
+.timeline {
+  display: flex; align-items: flex-start; gap: 0;
+  margin-bottom: 28px; overflow-x: auto; padding-bottom: 8px;
+}
+.timelineStep { display: flex; flex-direction: column; align-items: center; position: relative; flex: 1; min-width: 70px; }
+.timelineDot {
+  width: 32px; height: 32px; border-radius: 50%; border: 2px solid #e8e0d8;
+  background: #fff; display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: #aaa; z-index: 1; flex-shrink: 0;
+}
+.dotDone { background: #3ecf8e; border-color: #3ecf8e; color: #fff; }
+.dotActive { background: #c97b4b; border-color: #c97b4b; color: #fff; }
+.timelineLabel { margin: 6px 0 0; font-size: 10px; color: #aaa; text-align: center; line-height: 1.3; }
+.labelActive { color: #c97b4b; font-weight: 600; }
+.timelineLine {
+  position: absolute; top: 15px; left: 50%; width: 100%; height: 2px;
+  background: #e8e0d8; z-index: 0;
+}
+.lineDone { background: #3ecf8e; }
+
+.cancelledBanner {
+  background: #fff5f5; border: 1px solid #fde8e8; border-radius: 10px;
+  padding: 12px 16px; color: #e05252; font-size: 14px; font-weight: 600; margin-bottom: 20px;
+}
+
+.sectionTitle { margin: 0 0 12px; font-size: 15px; font-weight: 600; color: #2d2d2d; }
+.itemsSection { margin-bottom: 20px; }
+.item { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f5f0eb; }
+.item:last-of-type { border-bottom: none; }
+.itemInfo { flex: 1; }
+.itemName { margin: 0; font-size: 14px; font-weight: 500; color: #2d2d2d; }
+.itemCat { margin: 2px 0 0; font-size: 12px; color: #aaa; }
+.itemRight { display: flex; align-items: center; gap: 12px; }
+.itemQty { font-size: 13px; color: #888; }
+.itemPrice { font-size: 14px; font-weight: 600; color: #c97b4b; }
+.totalRow { display: flex; justify-content: space-between; padding: 12px 0 0; font-size: 15px; color: #2d2d2d; border-top: 2px solid #f0e8e0; margin-top: 4px; }
+
+.deliverySection { background: #fdf6f0; border-radius: 10px; padding: 16px; }
+.deliveryAddr { margin: 0 0 6px; font-size: 14px; color: #555; }
+.trackingId { margin: 0 0 4px; font-size: 13px; color: #555; }
+.estDelivery { margin: 0; font-size: 13px; color: #555; }
+
+@media (max-width: 768px) {
+  .layout { grid-template-columns: 1fr; }
+}

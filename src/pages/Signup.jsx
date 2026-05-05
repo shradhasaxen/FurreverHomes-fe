@@ -1,11 +1,14 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { authApi, auth } from '../api'
+import { useAuth } from '../context/AuthContext'
 import styles from './Signup.module.css'
 
 export default function Signup() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const { login, signup: signupCtx } = useAuth()
+  const from = location.state?.from?.pathname || null
   const [panel, setPanel] = useState('signin')
   const [signupForm, setSignupForm] = useState({ name: '', email: '', password: '', confirmPassword: '', phone_num: '' })
   const [signinForm, setSigninForm] = useState({ email: '', password: '' })
@@ -39,14 +42,11 @@ export default function Signup() {
     if (Object.keys(errs).length) { setErrors(errs); return }
     setLoading(true)
     try {
-      const res = await authApi.signup(signupForm)
-      const { token, name, email, role, userId } = res.data
-      auth.setToken(token)
-      auth.setUser({ userId, name, email, role })
+      await signupCtx(signupForm)
       setMsg({ text: 'Account created successfully! 🎉', type: 'success' })
-      setTimeout(() => navigate('/adopt'), 1200)
+      setTimeout(() => navigate(from || '/dashboard'), 1200)
     } catch (err) {
-      setMsg({ text: err.message || 'Signup failed. Please check your details.', type: 'error' })
+      setMsg({ text: err.response?.data?.message || err.message || 'Signup failed.', type: 'error' })
     } finally { setLoading(false) }
   }
 
@@ -56,14 +56,11 @@ export default function Signup() {
     if (Object.keys(errs).length) { setErrors(errs); return }
     setLoading(true)
     try {
-      const res = await authApi.login(signinForm)
-      const { token, name, email, role, userId } = res.data
-      auth.setToken(token)
-      auth.setUser({ userId, name, email, role })
+      const data = await login(signinForm)
       setMsg({ text: 'Signed in successfully! 🐾', type: 'success' })
-      setTimeout(() => navigate('/adopt'), 1200)
+      setTimeout(() => navigate(from || (data.role === 'ADMIN' ? '/admin' : '/dashboard')), 1200)
     } catch (err) {
-      setMsg({ text: err.message || 'Invalid credentials. Please try again.', type: 'error' })
+      setMsg({ text: err.response?.data?.message || err.message || 'Invalid credentials.', type: 'error' })
     } finally { setLoading(false) }
   }
 

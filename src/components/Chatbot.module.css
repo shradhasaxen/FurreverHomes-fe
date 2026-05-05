@@ -403,3 +403,24 @@
   .bubble { font-size: 1.12rem; }
   .botName { font-size: 1.25rem; }
 }
+
+/* ── Pet chips (AI pet suggestions) ── */
+.petChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-left: 6px;
+  margin-top: 4px;
+}
+
+.petChip {
+  background: linear-gradient(135deg, #fdf6f0, #f5ebe0);
+  border: 1.5px solid #e8c9a8;
+  color: #c97b4b;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-family: 'Caveat', cursive;
+  font-size: 1.05rem;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(201,123,75,0.12);
+}

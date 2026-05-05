@@ -1,0 +1,43 @@
+.page { max-width: 800px; }
+.header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 28px; gap: 16px; flex-wrap: wrap; }
+.title { margin: 0 0 4px; font-size: 24px; font-weight: 700; color: #2d2d2d; }
+.sub { margin: 0; color: #888; font-size: 14px; }
+.headerActions { display: flex; gap: 10px; flex-wrap: wrap; }
+.actionBtn {
+  padding: 9px 18px; border-radius: 50px; background: linear-gradient(135deg, #c97b4b, #e8a87c);
+  color: #fff; text-decoration: none; font-size: 13px; font-weight: 600; white-space: nowrap;
+  transition: opacity 0.15s;
+}
+.actionBtn:hover { opacity: 0.9; }
+.loading { color: #aaa; text-align: center; padding: 40px; }
+
+.emptyState { text-align: center; padding: 60px 20px; background: #fff; border-radius: 16px; border: 1px solid #f0e8e0; }
+.emptyIcon { font-size: 48px; margin: 0 0 12px; }
+.emptyState h3 { margin: 0 0 8px; color: #2d2d2d; }
+.emptyState p { color: #888; margin: 0 0 20px; font-size: 14px; }
+.emptyActions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+.bookingsList { display: flex; flex-direction: column; gap: 12px; }
+
+.bookingCard {
+  background: #fff; border-radius: 14px; padding: 20px;
+  border: 1px solid #f0e8e0; display: flex; align-items: flex-start; gap: 16px;
+  transition: box-shadow 0.2s;
+}
+.bookingCard:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.07); }
+
+.bookingIcon { font-size: 32px; flex-shrink: 0; }
+.bookingInfo { flex: 1; }
+.bookingTop { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; flex-wrap: wrap; }
+.bookingTitle { margin: 0; font-size: 16px; font-weight: 600; color: #2d2d2d; }
+.bookingMeta { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+.bookingMeta span { font-size: 13px; color: #888; }
+.bookingNotes { margin: 0; font-size: 13px; color: #aaa; font-style: italic; }
+
+.cancelBtn {
+  padding: 7px 14px; border-radius: 50px; border: 1.5px solid #e05252;
+  background: #fff5f5; color: #e05252; font-size: 12px; font-weight: 600;
+  cursor: pointer; white-space: nowrap; flex-shrink: 0;
+}
+.cancelBtn:hover { background: #fde8e8; }
+.cancelBtn:disabled { opacity: 0.6; cursor: not-allowed; }

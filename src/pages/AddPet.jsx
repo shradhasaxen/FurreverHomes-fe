@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { petApi, auth } from '../api'
+import { petApi } from '../api'
+import { useAuth } from '../context/AuthContext'
 import styles from './FormPage.module.css'
 
 const INITIAL = {
@@ -13,6 +14,7 @@ const INITIAL = {
 
 export default function AddPet() {
   const navigate = useNavigate()
+  const { user } = useAuth()
   const [form, setForm] = useState(INITIAL)
   const [errors, setErrors] = useState({})
   const [imageFile, setImageFile] = useState(null)
@@ -44,7 +46,7 @@ export default function AddPet() {
 
   async function handleSubmit(e) {
     e.preventDefault()
-    if (!auth.isLoggedIn()) { navigate('/signup'); return }
+    if (!user) { navigate('/login'); return }
     const errs = validate()
     if (Object.keys(errs).length) { setErrors(errs); return }
     setSubmitting(true)

@@ -1,12 +1,13 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { houseApi, auth } from '../api'
+import { houseApi, myPetsApi } from '../api'
+import { useAuth } from '../context/AuthContext'
 import styles from './FormPage.module.css'
 
 const INITIAL = {
-  petName: '', ownerName: '', petType: '', mobileNumber: '',
-  duration: '', petAddress: '', otherSuggestions: '',
+  petName: '', petType: '', mobileNumber: '',
+  duration: '', petAddress: '', notes: '',
 }
 
 export default function PetHouse() {
@@ -14,29 +15,44 @@ export default function PetHouse() {
   const [errors, setErrors] = useState({})
   const [success, setSuccess] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+  const [savedPets, setSavedPets] = useState([])
+  const navigate = useNavigate()
+  const { user } = useAuth()
+
+  useEffect(() => {
+    if (user) {
+      myPetsApi.getAll()
+        .then(pets => setSavedPets(pets || []))
+        .catch(() => {})
+    }
+  }, [user])
 
   function set(field, value) {
     setForm(f => ({ ...f, [field]: value }))
     if (errors[field]) setErrors(e => ({ ...e, [field]: '' }))
   }
 
+  function selectSavedPet(pet) {
+    setForm(f => ({
+      ...f,
+      petName: pet.petName,
+      petType: pet.petType,
+    }))
+  }
+
   function validate() {
     const e = {}
     if (!form.petName.trim()) e.petName = 'Required'
-    if (!form.ownerName.trim()) e.ownerName = 'Required'
     if (!form.petType) e.petType = 'Required'
     if (!/^\d{10}$/.test(form.mobileNumber)) e.mobileNumber = 'Enter valid 10-digit number'
     if (!form.duration || form.duration <= 0) e.duration = 'Required'
     if (!form.petAddress.trim()) e.petAddress = 'Required'
-    if (!form.otherSuggestions.trim()) e.otherSuggestions = 'Required'
     return e
   }
 
-  const navigate = useNavigate()
-
   async function handleSubmit(e) {
     e.preventDefault()
-    if (!auth.isLoggedIn()) { navigate('/signup'); return }
+    if (!user) { navigate('/login'); return }
     const errs = validate()
     if (Object.keys(errs).length) { setErrors(errs); return }
     setSubmitting(true)
@@ -44,7 +60,7 @@ export default function PetHouse() {
       await houseApi.submit(form)
       setSuccess(true)
     } catch (err) {
-      alert(err.message || 'Submission failed. Please try again.')
+      alert(err.response?.data?.message || 'Submission failed. Please try again.')
     } finally {
       setSubmitting(false)
     }
@@ -55,9 +71,27 @@ export default function PetHouse() {
       <div className={styles.formCard}>
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
           <h2 className={styles.formTitle}>
-            Travel worry-free knowing your pet's in good hands 🏠
+            Travel worry-free — your pet's in good hands 🏠
           </h2>
           <p className={styles.formSub}>Fill in the details and we'll confirm availability</p>
+
+          {savedPets.length > 0 && (
+            <div className={styles.savedPetsRow}>
+              <p className={styles.savedPetsLabel}>Quick select from your pets:</p>
+              <div className={styles.petChips}>
+                {savedPets.map(pet => (
+                  <button
+                    key={pet.id}
+                    type="button"
+                    className={styles.petChip}
+                    onClick={() => selectSavedPet(pet)}
+                  >
+                    {pet.petType === 'DOG' ? '🐕' : pet.petType === 'CAT' ? '🐈' : '🐾'} {pet.petName}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} noValidate>
             <div className={styles.section}>
@@ -65,32 +99,29 @@ export default function PetHouse() {
                 <Field label="Pet's Name" error={errors.petName}>
                   <input className={styles.input} placeholder="Pet's name" value={form.petName} onChange={e => set('petName', e.target.value)} />
                 </Field>
-                <Field label="Owner's Name" error={errors.ownerName}>
-                  <input className={styles.input} placeholder="Your name" value={form.ownerName} onChange={e => set('ownerName', e.target.value)} />
-                </Field>
-              </div>
-              <div className={styles.row}>
                 <Field label="Pet Type" error={errors.petType}>
                   <select className={styles.input} value={form.petType} onChange={e => set('petType', e.target.value)}>
                     <option value="">Select type</option>
-                    <option value="dog">Dog</option>
-                    <option value="cat">Cat</option>
-                    <option value="bird">Bird</option>
-                    <option value="other">Other</option>
+                    <option value="DOG">Dog</option>
+                    <option value="CAT">Cat</option>
+                    <option value="BIRD">Bird</option>
+                    <option value="OTHER">Other</option>
                   </select>
                 </Field>
+              </div>
+              <div className={styles.row}>
                 <Field label="Mobile Number" error={errors.mobileNumber}>
                   <input className={styles.input} placeholder="10-digit number" value={form.mobileNumber} onChange={e => set('mobileNumber', e.target.value)} maxLength={10} />
                 </Field>
+                <Field label="Duration (days)" error={errors.duration}>
+                  <input className={styles.input} type="number" placeholder="Number of days" value={form.duration} onChange={e => set('duration', e.target.value)} min={1} />
+                </Field>
               </div>
-              <Field label="Duration (days)" error={errors.duration}>
-                <input className={styles.input} type="number" placeholder="Number of days" value={form.duration} onChange={e => set('duration', e.target.value)} min={1} />
-              </Field>
-              <Field label="Pet's Address" error={errors.petAddress}>
+              <Field label="Pickup Address" error={errors.petAddress}>
                 <textarea className={`${styles.input} ${styles.textarea}`} placeholder="Full address for pickup" value={form.petAddress} onChange={e => set('petAddress', e.target.value)} rows={3} />
               </Field>
-              <Field label="Reason & Notes" error={errors.otherSuggestions}>
-                <textarea className={`${styles.input} ${styles.textarea}`} placeholder="Reason for boarding and any special requirements..." value={form.otherSuggestions} onChange={e => set('otherSuggestions', e.target.value)} rows={3} />
+              <Field label="Reason & Notes (optional)">
+                <textarea className={`${styles.input} ${styles.textarea}`} placeholder="Reason for boarding and any special requirements..." value={form.notes} onChange={e => set('notes', e.target.value)} rows={3} />
               </Field>
             </div>
 
@@ -107,7 +138,7 @@ export default function PetHouse() {
             <motion.div className={styles.successModal} initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.8, opacity: 0 }}>
               <div className={styles.successIcon}>🏠</div>
               <h3>Request Received!</h3>
-              <p>Thank you! We will contact you soon regarding availability of shelter.</p>
+              <p>We'll contact you soon regarding availability. A confirmation email has been sent!</p>
               <button className={styles.successBtn} onClick={() => { setSuccess(false); setForm(INITIAL) }}>Done</button>
             </motion.div>
           </motion.div>

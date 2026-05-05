@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import Footer from '../components/Footer'
-import { petApi, adoptionApi, auth } from '../api'
+import { petApi, adoptionApi } from '../api'
+import { useAuth } from '../context/AuthContext'
 import { getNextImage } from '../data/petImages'
 import styles from './AdoptPet.module.css'
 
@@ -15,11 +16,11 @@ export default function AdoptPet() {
   const [adoptMsg, setAdoptMsg] = useState('')
   const [adoptLoading, setAdoptLoading] = useState(false)
   const navigate = useNavigate()
-
+  const { user } = useAuth()
   useEffect(() => {
     petApi.fetchAll()
       .then(res => {
-        const list = res?.data?.content ?? res?.data ?? []
+        const list = res?.content ?? res?.data?.content ?? res?.data ?? []
         setPets(list.map(p => ({
           ...p,
           image: p.imageUrl || getNextImage(p.petType?.toLowerCase()),
@@ -30,7 +31,7 @@ export default function AdoptPet() {
   }, [])
 
   async function handleAdopt(pet) {
-    if (!auth.isLoggedIn()) { navigate('/signup'); return }
+    if (!user) { navigate('/login'); return }
     setAdoptMsg('')
     setAdoptModal(pet)
   }

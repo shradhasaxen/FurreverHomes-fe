@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import Footer from '../components/Footer'
-import { blogApi, auth } from '../api'
+import { blogApi } from '../api'
+import { useAuth } from '../context/AuthContext'
 import styles from './Blog.module.css'
 
 const SAMPLE_POSTS = [
@@ -20,11 +21,12 @@ export default function Blog() {
   const [submitting, setSubmitting] = useState(false)
   const [expanded, setExpanded] = useState(null)
   const navigate = useNavigate()
+  const { user } = useAuth()
 
   useEffect(() => {
     blogApi.fetchAll()
       .then(res => {
-        const list = res?.data?.content ?? res?.data ?? []
+        const list = res?.content ?? res?.data?.content ?? res?.data ?? []
         if (list.length) setPosts(p => [...list, ...p])
       })
       .catch(() => {})
@@ -40,7 +42,7 @@ export default function Blog() {
   }
 
   function handleWriteClick() {
-    if (!auth.isLoggedIn()) { navigate('/signup'); return }
+    if (!user) { navigate('/login'); return }
     setShowPopup(true)
   }
 
@@ -51,7 +53,6 @@ export default function Blog() {
     setSubmitting(true)
     try {
       await blogApi.submit({ blog: `${form.title}\n${form.content}` })
-      const user = auth.getUser()
       setPosts(p => [{ authorName: user?.name || 'You', title: form.title, content: form.content }, ...p])
       setSuccess(true)
       setForm({ title: '', content: '' })

@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { bookingApi, auth } from '../api'
+import { bookingApi } from '../api'
+import { useAuth } from '../context/AuthContext'
 import styles from './FormPage.module.css'
 
 const INITIAL = {
@@ -15,6 +16,7 @@ export default function BookPet() {
   const [success, setSuccess] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const navigate = useNavigate()
+  const { user } = useAuth()
 
   function set(field, value) {
     setForm(f => ({ ...f, [field]: value }))
@@ -36,7 +38,7 @@ export default function BookPet() {
 
   async function handleSubmit(e) {
     e.preventDefault()
-    if (!auth.isLoggedIn()) { navigate('/signup'); return }
+    if (!user) { navigate('/login'); return }
     const errs = validate()
     if (Object.keys(errs).length) { setErrors(errs); return }
     setSubmitting(true)

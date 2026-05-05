@@ -261,3 +261,44 @@
   .row { grid-template-columns: 1fr; }
   .formCard { width: 98%; margin: 16px auto; }
 }
+
+/* ── Saved pets quick-select ── */
+.savedPetsRow {
+  background: rgba(255,255,255,0.6);
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(61,64,91,0.12);
+}
+
+.savedPetsLabel {
+  font-family: 'Caveat', cursive;
+  font-size: 1rem;
+  color: #3D405B;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.petChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.petChip {
+  background: linear-gradient(135deg, #3D405B, #5a5f82);
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-family: 'Caveat', cursive;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.petChip:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}

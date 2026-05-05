@@ -92,15 +92,29 @@ export default function Shopping() {
   const [cartOpen, setCartOpen] = useState(false)
   const navigate = useNavigate()
 
-  function addToCart(product) {
-    setCart(c => [...c, { ...product, cartId: Date.now() + Math.random() }])
+  function addToCart(product, category) {
+    setCart(c => {
+      const existing = c.find(i => i.name === product.name)
+      if (existing) {
+        return c.map(i => i.name === product.name ? { ...i, quantity: i.quantity + 1 } : i)
+      }
+      return [...c, { ...product, category, quantity: 1, cartId: product.name }]
+    })
   }
 
   function removeFromCart(cartId) {
     setCart(c => c.filter(i => i.cartId !== cartId))
   }
 
-  const total = cart.reduce((sum, i) => sum + i.price, 0)
+  function changeQty(cartId, delta) {
+    setCart(c => c
+      .map(i => i.cartId === cartId ? { ...i, quantity: i.quantity + delta } : i)
+      .filter(i => i.quantity > 0)
+    )
+  }
+
+  const totalItems = cart.reduce((sum, i) => sum + i.quantity, 0)
+  const total = cart.reduce((sum, i) => sum + i.price * i.quantity, 0)
 
   return (
     <div className={styles.page}>
@@ -138,7 +152,7 @@ export default function Shopping() {
                     </div>
                     <motion.button
                       className={styles.addBtn}
-                      onClick={() => addToCart(product)}
+                      onClick={() => addToCart(product, section.title)}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
@@ -162,7 +176,7 @@ export default function Shopping() {
         whileTap={{ scale: 0.94 }}
       >
         <i className="fas fa-cart-shopping" />
-        {cart.length > 0 && <span className={styles.cartBadge}>{cart.length}</span>}
+        {totalItems > 0 && <span className={styles.cartBadge}>{totalItems}</span>}
       </motion.button>
 
       {/* Cart Drawer */}
@@ -184,7 +198,7 @@ export default function Shopping() {
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             >
               <div className={styles.cartHeader}>
-                <h2 className={styles.cartTitle}>🛒 Cart ({cart.length})</h2>
+                <h2 className={styles.cartTitle}>🛒 Cart ({totalItems})</h2>
                 <button className={styles.cartClose} onClick={() => setCartOpen(false)}>×</button>
               </div>
               <div className={styles.cartItems}>
@@ -194,10 +208,17 @@ export default function Shopping() {
                   cart.map(item => (
                     <div key={item.cartId} className={styles.cartItem}>
                       <span className={styles.cartItemName}>{item.name}</span>
-                      <span className={styles.cartItemPrice}>₹{item.price}</span>
-                      <button className={styles.removeBtn} onClick={() => removeFromCart(item.cartId)}>
-                        <i className="fas fa-trash-alt" />
-                      </button>
+                      <div className={styles.cartItemRight}>
+                        <div className={styles.qtyControls}>
+                          <button className={styles.qtyBtn} onClick={() => changeQty(item.cartId, -1)}>−</button>
+                          <span className={styles.qtyNum}>{item.quantity}</span>
+                          <button className={styles.qtyBtn} onClick={() => changeQty(item.cartId, 1)}>+</button>
+                        </div>
+                        <span className={styles.cartItemPrice}>₹{(item.price * item.quantity).toFixed(0)}</span>
+                        <button className={styles.removeBtn} onClick={() => removeFromCart(item.cartId)}>
+                          <i className="fas fa-trash-alt" />
+                        </button>
+                      </div>
                     </div>
                   ))
                 )}
@@ -207,7 +228,7 @@ export default function Shopping() {
                 <button
                   className={styles.buyNowBtn}
                   disabled={cart.length === 0}
-                  onClick={() => { setCartOpen(false); navigate('/payment') }}
+                  onClick={() => { setCartOpen(false); navigate('/payment', { state: { cartItems: cart } }) }}
                 >
                   Buy Now
                 </button>

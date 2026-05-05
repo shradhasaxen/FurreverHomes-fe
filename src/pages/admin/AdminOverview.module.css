@@ -1,0 +1,33 @@
+.page { max-width: 1000px; }
+.header { margin-bottom: 28px; }
+.title { margin: 0 0 4px; font-size: 24px; font-weight: 700; color: #2d2d2d; }
+.sub { margin: 0; color: #888; font-size: 14px; }
+
+.statsGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+
+.statCard {
+  background: #fff; border-radius: 14px; padding: 20px;
+  display: flex; align-items: center; gap: 16px; text-decoration: none;
+  border: 1px solid #e8e0d8; transition: box-shadow 0.2s, transform 0.2s;
+}
+.statCard:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.08); transform: translateY(-2px); }
+.statIcon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+.statValue { margin: 0; font-size: 28px; font-weight: 700; color: #2d2d2d; }
+.statLabel { margin: 2px 0 0; font-size: 13px; color: #888; }
+
+.twoCol { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+.section { background: #fff; border-radius: 14px; padding: 20px; border: 1px solid #e8e0d8; }
+.sectionHeader { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.sectionTitle { margin: 0; font-size: 15px; font-weight: 600; color: #2d2d2d; }
+.viewAll { font-size: 13px; color: #c97b4b; text-decoration: none; font-weight: 500; }
+.viewAll:hover { text-decoration: underline; }
+
+.listItem { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f5f0eb; }
+.listItem:last-child { border-bottom: none; }
+.listTitle { margin: 0; font-size: 14px; font-weight: 500; color: #2d2d2d; }
+.listSub { margin: 2px 0 0; font-size: 12px; color: #aaa; }
+.empty { color: #aaa; font-size: 14px; text-align: center; padding: 20px 0; margin: 0; }
+
+@media (max-width: 900px) { .statsGrid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .statsGrid { grid-template-columns: 1fr; } .twoCol { grid-template-columns: 1fr; } }

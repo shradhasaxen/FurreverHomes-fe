@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { auth } from '../api'
+import { useAuth } from '../context/AuthContext'
 import styles from './Navbar.module.css'
 
 const SOUNDS = ['/sound/barkkk.mp3', '/sound/cat.mp3', '/sound/bird.wav']
@@ -9,7 +9,7 @@ const SOUNDS = ['/sound/barkkk.mp3', '/sound/cat.mp3', '/sound/bird.wav']
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
-  const [user, setUser] = useState(auth.getUser())
+  const { user, logout } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
   const audioRef = useRef(null)
@@ -20,11 +20,8 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Refresh user state on every route change (handles login/logout)
-  useEffect(() => {
-    setMenuOpen(false)
-    setUser(auth.getUser())
-  }, [location])
+  // Close menu on route change
+  useEffect(() => { setMenuOpen(false) }, [location])
 
   function playRandomSound() {
     const src = SOUNDS[Math.floor(Math.random() * SOUNDS.length)]
@@ -34,15 +31,16 @@ export default function Navbar() {
     }
   }
 
-  function handleLogout() {
-    auth.clear()
-    setUser(null)
+  async function handleLogout() {
+    await logout()
     navigate('/')
   }
 
   const navLinks = [
     { to: '/add-pet', label: 'Add Pet' },
     { to: '/adopt', label: 'Adopt Pet' },
+    { to: '/shopping', label: 'Shop' },
+    { to: '/blog', label: 'Blog' },
   ]
 
   return (
@@ -78,19 +76,22 @@ export default function Navbar() {
             ))}
             {user ? (
               <>
-                <span className={styles.navLink} style={{ opacity: 0.75, cursor: 'default' }}>
+                <Link to="/dashboard" className={styles.navLink} style={{ opacity: 0.85 }}>
                   👤 {user.name?.split(' ')[0]}
-                </span>
+                </Link>
+                {user.role === 'ADMIN' && (
+                  <Link to="/admin" className={`${styles.navLink}`} style={{ color: '#c97b4b' }}>Admin</Link>
+                )}
                 <button className={`${styles.navLink} ${styles.signupLink}`} onClick={handleLogout}>
                   Logout
                 </button>
               </>
             ) : (
               <Link
-                to="/signup"
-                className={`${styles.navLink} ${styles.signupLink} ${location.pathname === '/signup' ? styles.active : ''}`}
+                to="/login"
+                className={`${styles.navLink} ${styles.signupLink} ${location.pathname === '/login' ? styles.active : ''}`}
               >
-                Sign Up
+                Sign In
               </Link>
             )}
           </div>
@@ -125,10 +126,13 @@ export default function Navbar() {
                 </Link>
               ))}
               {user ? (
-                <button className={styles.mobileLink} onClick={handleLogout}>Logout</button>
+                <>
+                  <Link to="/dashboard" className={styles.mobileLink} onClick={() => setMenuOpen(false)}>My Dashboard</Link>
+                  <button className={styles.mobileLink} onClick={handleLogout}>Logout</button>
+                </>
               ) : (
-                <Link to="/signup" className={`${styles.mobileLink} ${location.pathname === '/signup' ? styles.active : ''}`}>
-                  Sign Up
+                <Link to="/login" className={`${styles.mobileLink} ${location.pathname === '/login' ? styles.active : ''}`}>
+                  Sign In
                 </Link>
               )}
             </motion.div>
